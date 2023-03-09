@@ -24,8 +24,6 @@ RUN pip3 install -r requirements.txt
 # Copy the app folder to the working directory
 COPY . .
 COPY gunicorn.service /etc/systemd/system/
-COPY nginx.conf /etc/nginx/sites-available/default
-
 
 CMD systemctl daemon-reload \
     && systemctl start gunicorn \
@@ -45,6 +43,5 @@ EXPOSE 5000
 
 CMD systemctl restart nginx \
     && systemctl restart gunicorn
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000", "-w", "4", "--log-level=debug"]
-
+CMD gunicorn --bind 0.0.0.0:5000 app:app
 
